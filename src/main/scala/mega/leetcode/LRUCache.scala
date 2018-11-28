@@ -6,11 +6,12 @@ package mega.leetcode
 
 class LRUCache(_capacity: Int) {
   case class Node(key: Int, value: Int, var prev: Node = null, var next: Node = null)
-  var head = Node(-1, -1)
-  var tail = Node(-1, -1, head)
+  private val cache = scala.collection.mutable.Map.empty[Int, Node]
+  private var size = 0
+  private var head = Node(-1, -1)
+  private var tail = Node(-1, -1, head)
+
   head = head.copy(next = tail)
-  val cache = scala.collection.mutable.Map.empty[Int, Node]
-  var size = 0
 
   def get(key: Int): Int = {
     cache.get(key) match {
@@ -44,12 +45,12 @@ class LRUCache(_capacity: Int) {
     }
   }
 
-  def removeFromList(node: Node): Unit = {
+  private def removeFromList(node: Node): Unit = {
     node.prev.next = node.next
     node.next.prev = node.prev
   }
 
-  def addToListHead(node: Node): Unit = {
+  private def addToListHead(node: Node): Unit = {
     node.next = head.next
     node.prev = head
     head.next.prev = node
